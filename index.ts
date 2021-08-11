@@ -3,6 +3,26 @@
  * класса Продукт. Подклассы Создателя обычно предоставляют реализацию этого
  * метода.
  */
+
+type Outcome ={
+  odd:number
+  name:string
+  
+}
+type MarketBluePrint = {
+  info:string;
+  code:string;
+  kind:string;
+  interval:string;
+  outcomes:Array<Outcome>;
+
+};
+interface Market {
+
+  operation(): string;
+  setOutcomes(outcomes:Array<Outcome>): void;
+  returnMarket(): MarketBluePrint;
+}
 abstract class MarketCreator {
   /**
    * Обратите внимание, что Создатель может также обеспечить реализацию
@@ -55,16 +75,48 @@ class MarketCreator_Total extends MarketCreator {
  * Интерфейс Продукта объявляет операции, которые должны выполнять все
  * конкретные продукты.
  */
-interface Market {
-  info: string;
-  operation(): string;
-}
+
+
+
+
 
 /**
  * Конкретные Продукты предоставляют различные реализации интерфейса Продукта.
  */
-class Market_1X2 implements Market {
-  info = "1x2Market";
+class Market_1X2 implements Market, MarketBluePrint {
+  
+  info:string;
+  code:string;
+  kind:string;
+  interval:string;
+  outcomes:Array<Outcome>;
+  
+  constructor(){
+    this.info = "1X2 Winnder"
+    this.code = "W3"
+    this.kind = "goal"
+    this.interval = "ft"
+    this.outcomes =[]
+  }
+
+  setOutcomes(outcomes:Array<Outcome>): Market_1X2 {
+    this.outcomes = outcomes;
+    return this;
+  }
+
+  returnMarket(): MarketBluePrint {
+    if (this.outcomes.length <0){
+      throw new Error("There are 0 outcomes");
+    }
+    return {
+      info : this.info,
+      kind : this.kind,
+      code: this.code,
+      interval: this.interval,
+      outcomes: this.outcomes
+    }
+  }
+
 
   public operation(): string {
     return "{1x2}";
@@ -72,6 +124,17 @@ class Market_1X2 implements Market {
 }
 
 class Market_Total implements Market {
+  outcomes = [];
+  code= "";
+  kind= "";
+  interval = "";
+  setOutcomes(): void {
+    throw new Error("Method not implemented.");
+  }
+
+  returnMarket(): MarketBluePrint {
+    throw new Error("Method not implemented.");
+  }
   info = "TotalMarket";
   public operation(): string {
     return "{Total}";
@@ -105,3 +168,10 @@ clientCode(new MarketCreator_Total());
 
 console.log("---------------");
 const newMarket = new MarketCreator_1x2().returnMarket();
+
+var outcomeArray: Array<Outcome> = []
+const newOutcome : Outcome = {odd:2.5, name:"P1"}; 
+outcomeArray.push(newOutcome)
+const testMarket = new Market_1X2().setOutcomes(outcomeArray).returnMarket();
+
+console.log(testMarket)

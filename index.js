@@ -44,11 +44,35 @@ class MarketCreator_Total extends MarketCreator {
     }
 }
 /**
+ * Интерфейс Продукта объявляет операции, которые должны выполнять все
+ * конкретные продукты.
+ */
+/**
  * Конкретные Продукты предоставляют различные реализации интерфейса Продукта.
  */
 class Market_1X2 {
     constructor() {
-        this.info = "1x2Market";
+        this.info = "1X2 Winnder";
+        this.code = "W3";
+        this.kind = "goal";
+        this.interval = "ft";
+        this.outcomes = [];
+    }
+    setOutcomes(outcomes) {
+        this.outcomes = outcomes;
+        return this;
+    }
+    returnMarket() {
+        if (this.outcomes.length < 0) {
+            throw new Error("There are 0 outcomes");
+        }
+        return {
+            info: this.info,
+            kind: this.kind,
+            code: this.code,
+            interval: this.interval,
+            outcomes: this.outcomes
+        };
     }
     operation() {
         return "{1x2}";
@@ -56,7 +80,17 @@ class Market_1X2 {
 }
 class Market_Total {
     constructor() {
+        this.outcomes = [];
+        this.code = "";
+        this.kind = "";
+        this.interval = "";
         this.info = "TotalMarket";
+    }
+    setOutcomes() {
+        throw new Error("Method not implemented.");
+    }
+    returnMarket() {
+        throw new Error("Method not implemented.");
     }
     operation() {
         return "{Total}";
@@ -83,4 +117,9 @@ console.log("App: Launched with the ConcreteCreator2.");
 clientCode(new MarketCreator_Total());
 console.log("---------------");
 const newMarket = new MarketCreator_1x2().returnMarket();
+var outcomeArray = [];
+const newOutcome = { odd: 2.5, name: "P1" };
+outcomeArray.push(newOutcome);
+const testMarket = new Market_1X2().setOutcomes(outcomeArray).returnMarket();
+console.log(testMarket);
 //# sourceMappingURL=index.js.map
